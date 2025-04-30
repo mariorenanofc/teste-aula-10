@@ -222,24 +222,42 @@ function proximaPergunta() {
 function mostrarResultado() {
     resultadoElemento.textContent = `Você acertou ${respostasCorretas} de ${perguntas.length} perguntas.`;
     resultadoElemento.classList.remove("hidden");
-    linkContainer.classList.remove("hidden"); // Garante que o container do link seja visível
+    linkContainer.classList.remove("hidden");
+    proximoPerguntaBotao.classList.add("hidden");
+
+    let tentativasFalhas = parseInt(localStorage.getItem('tentativasFalhas')) || 0;
 
     if (respostasCorretas >= 8) {
         linkAprovacao.textContent = "Acessar Conteúdo Especial";
         linkAprovacao.href = "https://www.programiz.com/online-compiler/88tXrkj7eDbUX";
+        localStorage.removeItem('tentativasFalhas');
+        localStorage.removeItem('ultimaTentativa');
+        if (tentarNovamenteBotao) {
+            tentarNovamenteBotao.classList.add("hidden"); // Garante que o botão não apareça em caso de sucesso
+        }
     } else {
+        tentativasFalhas++;
+        localStorage.setItem('tentativasFalhas', tentativasFalhas);
+        localStorage.setItem('ultimaTentativa', Date.now());
         linkAprovacao.textContent = "Revisar Conteúdo";
         linkAprovacao.href = "https://classroom.google.com/c/NzYzMDc2MDI1NzI2/a/NzYzMDc1ODgzMTEy/details";
-        // Adiciona a mensagem de reprovação
         const mensagemReprovacao = document.createElement('p');
-        mensagemReprovacao.textContent = "Você não conseguiu atingir a pontuação mínima. Revise o conteúdo novamente para testar outra vez.";
-        mensagemReprovacao.classList.add("text-red-500", "mt-4"); // Opcional: adiciona um estilo para destacar a mensagem
+        mensagemReprovacao.textContent = `Você não conseguiu atingir a pontuação mínima (${respostasCorretas}/${perguntas.length}). Revise o conteúdo e tente novamente. Você tem um limite de 3 tentativas para conseguir o link.`;
+        mensagemReprovacao.classList.add("text-red-500", "mt-4");
         resultadoElemento.parentNode.insertBefore(mensagemReprovacao, linkContainer);
-    }
-
-    proximoPerguntaBotao.classList.add("hidden");
-    if (localStorageDisponivel) {
-        localStorage.clear();
+        // Limpar respostas anteriores para uma nova tentativa
+        for (let i = 0; i < perguntas.length; i++) {
+            localStorage.removeItem(`pergunta${i}`);
+        }
+        if (tentativasFalhas < 3 && tentarNovamenteBotao) {
+            tentarNovamenteBotao.classList.remove("hidden"); // Mostra o botão se não atingiu o limite
+        } else if (tentativasFalhas >= 3 && tentarNovamenteBotao) {
+            tentarNovamenteBotao.classList.add("hidden"); // Oculta o botão se atingiu o limite
+            const mensagemLimite = document.createElement('p');
+            mensagemLimite.textContent = "Você atingiu o limite de 3 tentativas para este questionário.";
+            mensagemLimite.classList.add("text-gray-500", "mt-2");
+            resultadoElemento.parentNode.insertBefore(mensagemLimite, linkContainer);
+        }
     }
 }
 
@@ -259,3 +277,64 @@ for (let i = 0; i < opcoesElemento.length; i++) {
     });
 }
 proximoPerguntaBotao.addEventListener("click", proximaPergunta);
+
+const tentarNovamenteBotao = document.getElementById('tentar-novamente');
+
+function verificarTempoLimite() {
+    const tentativasFalhas = parseInt(localStorage.getItem('tentativasFalhas')) || 0;
+    const ultimaTentativa = parseInt(localStorage.getItem('ultimaTentativa')) || 0;
+    const tempoAtual = Date.now();
+    let tempoEspera = 0;
+
+    if (tentativasFalhas === 1) {
+        tempoEspera = 10 * 60 * 1000; // 10 minutos
+        return (tempoAtual - ultimaTentativa >= tempoEspera);
+    } else if (tentativasFalhas === 2) {
+        tempoEspera = 20 * 60 * 1000; // 20 minutos
+        return (tempoAtual - ultimaTentativa >= tempoEspera);
+    } else if (tentativasFalhas >= 3) {
+        return false; // Não pode tentar novamente
+    }
+
+    return true; // Pode tentar novamente (0 tentativas ou tempo limite atingido)
+}
+
+
+if (tentarNovamenteBotao) {
+    tentarNovamenteBotao.addEventListener('click', () => {
+        if (verificarTempoLimite()) {
+            perguntaAtual = 0;
+            respostasCorretas = 0;
+            alunoRespondeu = false;
+            carregarPergunta();
+            resultadoElemento.classList.add("hidden");
+            linkContainer.classList.add("hidden");
+            tentarNovamenteBotao.classList.add("hidden");
+        } else {
+            const tentativasFalhas = parseInt(localStorage.getItem('tentativasFalhas')) || 0;
+            const ultimaTentativa = parseInt(localStorage.getItem('ultimaTentativa')) || 0;
+            const tempoAtual = Date.now();
+            let tempoEspera = 0;
+            let mensagemBloqueio = "";
+
+            if (tentativasFalhas === 1) {
+                tempoEspera = 10 * 60 * 1000;
+                const minutosRestantes = Math.ceil((tempoEspera - (tempoAtual - ultimaTentativa)) / (60 * 1000));
+                mensagemBloqueio = `Você poderá tentar novamente em ${minutosRestantes} minutos.`;
+            } else if (tentativasFalhas === 2) {
+                tempoEspera = 20 * 60 * 1000;
+                const minutosRestantes = Math.ceil((tempoEspera - (tempoAtual - ultimaTentativa)) / (60 * 1000));
+                mensagemBloqueio = `Você poderá tentar novamente em ${minutosRestantes} minutos.`;
+            } else if (tentativasFalhas >= 3) {
+                mensagemBloqueio = "Você atingiu o limite de tentativas para este questionário.";
+            }
+
+            resultadoElemento.textContent = mensagemBloqueio;
+            resultadoElemento.classList.remove("hidden");
+            linkContainer.classList.add("hidden");
+        }
+    });
+}
+
+// Não precisamos mais da verificação de tempo limite ao carregar a página aqui,
+// pois o botão só aparece após a finalização.
