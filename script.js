@@ -229,7 +229,7 @@ function mostrarResultado() {
 
     if (respostasCorretas >= 8) {
         linkAprovacao.textContent = "Acessar Conteúdo Especial";
-        linkAprovacao.href = "https://www.programiz.com/online-compiler/88tXrkj7eDbUX";
+        linkAprovacao.href = "https://www.programiz.com/online-compiler/7c2eJm3yngqPI";
         localStorage.removeItem('tentativasFalhas');
         localStorage.removeItem('ultimaTentativa');
         if (tentarNovamenteBotao) {
