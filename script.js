@@ -335,6 +335,3 @@ if (tentarNovamenteBotao) {
         }
     });
 }
-
-// Não precisamos mais da verificação de tempo limite ao carregar a página aqui,
-// pois o botão só aparece após a finalização.

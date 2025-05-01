@@ -13,7 +13,7 @@
 <body class="bg-gradient-to-br from-gray-900 via-purple-900 to-black flex justify-center items-center min-h-screen p-4">
     <div class="bg-white/5 backdrop-blur-lg rounded-3xl shadow-2xl p-8 w-full max-w-md border border-white/10">
         <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 text-center mb-6">Quiz Rápido Trilha Tech</h1>
-        <div id="quiz-container" class="space-y-6">
+        <div id="quiz-container" class="space-y-6 text-center">
             <div id="pergunta" class="text-lg text-white"></div>
             <div id="opcoes-container" class="space-y-3">
                 <button id="opcao-a" class="opcao"></button>
@@ -26,8 +26,10 @@
             <div id="link-container" class="mt-6 text-center hidden">
                 <a id="link-aprovacao" href="#" class="bg-gradient-to-r from-green-500 to-lime-500 hover:from-green-600 hover:to-lime-600 text-white font-bold py-3 px-6 rounded-full transition-colors duration-300 ease-in-out shadow-md border border-white/20">Acessar Conteúdo Especial</a>
             </div>
-            <button id="proximo-pergunta" class="bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-pink-600 hover:to-yellow-600 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out shadow-md hidden">Próxima Pergunta</button>
-            <button id="tentar-novamente" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out shadow-md mt-4 hidden">Tentar Novamente</button>
+            <div class="items-center justify-center text-center">
+                <button id="proximo-pergunta" class="bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-pink-600 hover:to-yellow-600 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out shadow-md hidden">Próxima Pergunta</button>
+                <button id="tentar-novamente" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out shadow-md mt-4 hidden">Tentar Novamente</button>
+            </div>
         </div>
     </div>
 

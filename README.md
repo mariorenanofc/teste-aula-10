@@ -28,8 +28,8 @@ Este projeto é um quiz interativo desenvolvido em HTML, CSS (Tailwind CSS) e Ja
 
 1.  **Clone o repositório:**
     ```bash
-    git clone <URL_DO_SEU_REPOSITORIO>
-    cd <NOME_DA_PASTA_DO_PROJETO>
+    git clone https://github.com/mariorenanofc/teste-aula-10.git
+    cd teste-aula-10
     ```
 2.  **Abra o arquivo HTML:**
     Abra o arquivo `index.html` (ou o nome do seu arquivo HTML principal) diretamente em um navegador web moderno (como Chrome, Firefox, Edge, Safari).
