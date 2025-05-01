@@ -235,6 +235,14 @@ function mostrarResultado() {
         if (tentarNovamenteBotao) {
             tentarNovamenteBotao.classList.add("hidden"); // Garante que o botão não apareça em caso de sucesso
         }
+
+        // js-confetti (conforme a documentação)
+        const jsConfetti = new JSConfetti();
+        jsConfetti.addConfetti({
+            confettiColors: ['#ff0a54','#ff476b', '#ffd700'],
+            confettiRadius: 6,
+            confettiNumber: 200,
+        })
     } else {
         tentativasFalhas++;
         localStorage.setItem('tentativasFalhas', tentativasFalhas);
